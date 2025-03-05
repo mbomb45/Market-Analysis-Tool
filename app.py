@@ -1,12 +1,17 @@
-
-from flask import Flask, request, jsonify
-from fpdf import FPDF
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Market Analysis Tool is Running!"
+    return render_template('index.html')
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    property_name = request.form['property_name']
+    location = request.form['location']
+    return f"Received data for {property_name} in {location}"
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=10000)
