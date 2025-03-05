@@ -1,6 +1,6 @@
-
 from flask import Flask, render_template, request, send_file
 from fpdf import FPDF
+import os
 
 app = Flask(__name__)
 
@@ -28,13 +28,16 @@ def generate_pdf_report(content):
     pdf.cell(200, 10, "Market Analysis Report", ln=True, align='C')
     pdf.ln(10)
     pdf.multi_cell(0, 10, content)
-    pdf_path = "/mnt/data/market_analysis_report.pdf"
+
+    # Fix file path to avoid errors on Render
+    pdf_path = "market_analysis_report.pdf"
     pdf.output(pdf_path)
+    
     return pdf_path
 
 @app.route('/download_report')
 def download_report():
-    return send_file("/mnt/data/market_analysis_report.pdf", as_attachment=True)
+    return send_file("market_analysis_report.pdf", as_attachment=True)
 
 if __name__ == '__main__':
     from waitress import serve
